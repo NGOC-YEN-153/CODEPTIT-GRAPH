@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n , m  ;
+vector<int> v[1005] ;
+int used[1005];
+void inp(){
+    cin >> n>> m;
+    memset(used,0 ,sizeof(used));
+    for(int i = 1 ; i <= n ;i++)v[i].clear();
+    while(m--){
+        int x , y;
+        cin >> x >> y;
+        v[x].push_back(y);
+        v[y].push_back(x);
+    }
+}
+bool dfs(int u,int color){
+    used[u]= color;
+    for(auto x : v[u]){
+        if(!used[x]){
+            if(!dfs(x,-color))return false;
+        }
+        else if(used[x] == color)return false;
+    }
+    return true;
+}
+void solve(){
+    inp();
+    for(int i = 1; i<= n; i++){
+        if(!used[i]){
+            if(!dfs(i,1)){
+                cout<<"NO\n";
+                return;
+            }
+        }
+    }
+    cout<<"YES\n";
+}
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(NULL); cout.tie(NULL);
+    int t;
+    cin >>t;
+    while(t--)solve();
+}
