@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ii pair<int,int>
+int n , m  ;
+vector<int> v[1005] , r_v[1005];
+bool used[1005];
+stack<int> topo;
+void inp(){
+    cin >> n>> m;
+    memset(used,false,sizeof(used));
+    for(int i = 1 ; i <= n ;i++)v[i].clear();
+    for(int i = 1 ; i <= n ;i++)r_v[i].clear();
+    while(m--){
+        int x , y;
+        cin >> x >> y;
+        v[x].push_back(y);
+        r_v[y].push_back(x);
+    }
+    while(topo.size())topo.pop();
+}
+void init_topo(int u ){
+    used[u] = true;
+    for(auto x : v[u])if(!used[x])init_topo(x);
+    topo.push(u);
+}
+void r_dfs(int u){
+    used[u] = true;
+    for(auto x : r_v[u])if(!used[x])r_dfs(x);
+}
+int kosaraju(){
+    int scc = 0;
+    while(topo.size()){
+        auto u = topo.top(); topo.pop();
+        if(!used[u])scc++ , r_dfs(u);
+    }
+    return scc;
+}
+void solve(){
+    inp();
+    for(int i = 1 ; i<= n ; i++)if(!used[i])init_topo(i);
+    memset(used,false,sizeof(used));
+    int x = kosaraju();
+    if(x == 1)cout<<"YES";
+    else cout<<"NO";
+    cout<<endl;
+}
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(NULL); cout.tie(NULL);
+    int t;
+    cin >>t;
+    while(t--)solve();
+}
