@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define ii pair<int,int>
+struct canh{
+	int x , y ,w;
+};
+int d[1005] , n , m;
+vector<canh>edge;
+void inp(){
+	cin >> n >> m;
+	edge.clear();
+	for(int i =1  ; i<= n ; i++)d[i] = 1e9;
+	while(m--){
+		int x, y ,w;
+		cin >> x >> y >> w;
+		edge.push_back(canh{x,y,w});
+	}
+}
+bool bell_man_ford(int u){
+	d[u] = 0;
+	for(int i = 1 ; i<= n - 1 ; i++){
+		for(auto x : edge){
+			int u = x.x , v = x.y  , w = x.w;
+			if(d[u] != 1e9)d[v] = min(d[v] , d[u] + w);
+		}
+	}
+	for(auto x : edge){
+		int u = x.x , v = x.y , w = x.w;
+		if(d[u] != 1e9){
+			if(d[v] > d[u] + w)return true;
+		}
+	}
+	return false;
+}
+void solve(){
+    inp();
+	for(int i = 1 ; i<= n ;i++){
+		if(d[i] == 1e9){
+			if(bell_man_ford(i)){
+				cout<<1<<endl;
+				return;
+			}
+		}
+	}
+	cout<<0<<endl;
+}
+int main(){
+	int t;
+	cin >>t;
+	while(t--)solve();
+}
