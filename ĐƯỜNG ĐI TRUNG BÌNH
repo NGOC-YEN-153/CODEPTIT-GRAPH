@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ii pair<int,int>
+int n ,m ;
+int dp[105][105];
+set<int> se;
+vector<int> v;
+void inp(){
+    cin >> n >> m ;
+	se.clear();
+	v.clear();
+    for(int i = 1 ;i<= n; i++){
+        for(int j = 1 ; j<= n ;j++){
+            if(i == j)dp[i][j]  = 0;
+            else dp[i][j] = 1e9;
+        }
+    }
+    while(m--){
+        int x , y ;
+        cin >> x>> y ;
+		se.insert(x);
+		se.insert(y);
+        dp[x][y] = 1;
+    }
+	for(auto x : se)v.push_back(x);
+    for(int k  = 1; k<= n ; k ++){
+        for(int i = 1 ; i<= n ;i++){
+            for(int j = 1 ; j<= n ; j++){
+                dp[i][j] = min(dp[i][j], dp[i][k] + dp[k][j]);
+            }
+        }
+    }
+}
+
+void solve(){
+    inp();
+	int cnt  = 0;
+    double ans = 0 ;
+	for(int i = 0 ; i< v.size() ; i++){
+		for(int j = 0 ; j< v.size() ; j++){
+			if( i != j && dp[v[i]][v[j]] != 1e9)cnt++ , ans += (double)dp[v[i]][v[j]];
+		}
+	}
+	cout<<fixed<<setprecision(2)<<ans/cnt<<endl;
+}
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(NULL); cout.tie(NULL);
+    int t = 1 ;
+    cin >> t;
+    while(t--)solve();
+}
