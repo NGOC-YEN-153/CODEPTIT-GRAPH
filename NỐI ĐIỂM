@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ii pair<double,double>
+int n ;
+vector<pair<int , double> > v[105];
+vector<ii> store;
+bool used[105];
+double distance(ii a , ii b){
+	double x = a.first - b.first;
+	x*=x;
+	double y = a.second - b.second ;
+	y *= y;
+	return sqrt(x + y);
+}
+void inp(){
+    cin >> n ;
+	memset(used,false,sizeof(used));
+	store.clear();
+	for(int i = 0; i<= n ;i++)v[i].clear();
+	for(int i =1  ;i<= n ; i++){
+		double x , y;
+		cin >> x >> y;
+		store.push_back({x,y});
+	}
+	for(int i = 0 ; i< store.size() ; i++){
+		for(int j = i + 1 ; j< store.size() ; j++){
+			double kc = distance(store[i],store[j]);
+			v[i].push_back({j , kc});
+			v[j].push_back({i , kc});
+		}
+	}
+}
+void prim(){
+	double ans = 0;
+	priority_queue<pair<double , int> , vector<pair<double , int>> , greater<pair<double , int>>> q;
+	q.push({0.00,0});
+	while(q.size()){
+		auto  j = q.top() ; q.pop();
+		int  u = j.second;
+		double w = j.first;
+		if(used[u])continue;
+		used[u] = true;
+		ans += w;
+		for(auto x : v[u])q.push({x.second , x.first});
+	}
+	cout<<fixed<<setprecision(6)<<ans<<endl;
+}
+void solve(){
+    inp();
+    prim();
+}
+int main() {
+    ios_base::sync_with_stdio(0); cin.tie(NULL); cout.tie(NULL);
+    int t = 1 ;
+    cin >> t;
+    while(t--)solve();
+}
